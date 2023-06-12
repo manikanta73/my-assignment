@@ -1,0 +1,147 @@
+Assignment-Voting-App
+
+[root@ip-172-31-0-7 ~]# cd $home
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# git clone https://github.com/ashishrpandey/example-voting-app
+Cloning into 'example-voting-app'...
+remote: Enumerating objects: 494, done.
+remote: Total 494 (delta 0), reused 0 (delta 0), pack-reused 494
+Receiving objects: 100% (494/494), 236.18 KiB | 10.74 MiB/s, done.
+Resolving deltas: 100% (179/179), done.
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# cd  /root/example-voting-app/k8s-specifications
+[root@ip-172-31-0-7 k8s-specifications]# ls
+db-deployment.yaml     redis-service.yaml      vote-deployment.yaml
+db-service.yaml        result-deployment.yaml  vote-service.yaml
+redis-deployment.yaml  result-service.yaml     worker-deployment.yaml
+[root@ip-172-31-0-7 k8s-specifications]# ll
+total 36
+-rw-r--r-- 1 root root 401 Jun 12 11:56 db-deployment.yaml
+-rw-r--r-- 1 root root 146 Jun 12 11:56 db-service.yaml
+-rw-r--r-- 1 root root 402 Jun 12 11:56 redis-deployment.yaml
+-rw-r--r-- 1 root root 152 Jun 12 11:56 redis-service.yaml
+-rw-r--r-- 1 root root 299 Jun 12 11:56 result-deployment.yaml
+-rw-r--r-- 1 root root 195 Jun 12 11:56 result-service.yaml
+-rw-r--r-- 1 root root 289 Jun 12 11:56 vote-deployment.yaml
+-rw-r--r-- 1 root root 192 Jun 12 11:56 vote-service.yaml
+-rw-r--r-- 1 root root 292 Jun 12 11:56 worker-deployment.yaml
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+
+[root@ip-172-31-0-7 k8s-specifications]# kubectl apply -f .
+deployment.apps/db created
+service/db created
+deployment.apps/redis created
+service/redis created
+deployment.apps/result created
+service/result created
+deployment.apps/vote created
+service/vote created
+deployment.apps/worker created
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get pods
+NAME                      READY   STATUS              RESTARTS   AGE
+db-b54cd94f4-xmdbb    1/1     Running            0          23s
+kubia-manual              1/1     Running             0             6d7h
+nginx-katta                1/1     Running               0                7d4h
+redis-868d64d78-bmvr7     1/1     Running             0          23s
+result-5d57b59f4b-lqcsp   0/1     ContainerCreating   0          23s
+vote-94849dc97-2wj6d      0/1     ContainerCreating   0          22s
+worker-dd46d7584-879vq    0/1     ContainerCreating   0          22s
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get svc
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+db           ClusterIP   10.110.135.138   <none>        5432/TCP         2m37s
+kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP          7d7h
+redis        ClusterIP   10.103.247.134   <none>        6379/TCP         2m37s
+result       NodePort    10.104.12.232    <none>        5001:31001/TCP   2m36s
+vote         NodePort    10.99.55.144     <none>        5000:31000/TCP   2m36s
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+GUI Access  for voting application-  Cats vs Dogs!      GUI Access for Result application  Cats vs Dogs -- Result                                
+NOTE: Voting App container id vote-94849dc97-2wj6d
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-xmdbb        1/1     Running   0          6m22s
+kubia-manual              1/1     Running   0          6d7h
+nginx-katta               1/1     Running   0          7d4h
+redis-868d64d78-bmvr7     1/1     Running   0          6m22s
+result-5d57b59f4b-lqcsp   1/1     Running   0          6m22s
+vote-94849dc97-2wj6d      1/1     Running   0          6m21s
+worker-dd46d7584-879vq    1/1     Running   0          6m21s
+[root@ip-172-31-0-7 k8s-specifications]#
+
+Deleting the Vote pod:
+
+[root@ip-172-31-0-7 k8s-specifications]# kubectl delete po vote-94849dc97-2wj6d
+pod "vote-94849dc97-2wj6d" deleted
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-xmdbb        1/1     Running   0          8m45s
+kubia-manual              1/1     Running   0          6d7h
+nginx-katta               1/1     Running   0          7d4h
+redis-868d64d78-bmvr7     1/1     Running   0          8m45s
+result-5d57b59f4b-lqcsp   1/1     Running   0          8m45s
+vote-94849dc97-cb2tn      1/1     Running   0          98s
+worker-dd46d7584-879vq    1/1     Running   0          8m44s
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+NOTE: After deleting the vote pod, a new pod was created, and the app was still working on the GUI, but now it's responding with a new container ID, as shown below.
+Container id:  vote-94849dc97-cb2tn      
+ 
+
+Deleting the Worker pod:
+
+[root@ip-172-31-0-7 k8s-specifications]# kubectl delete po worker-dd46d7584-879vq
+pod "worker-dd46d7584-879vq" deleted
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-xmdbb        1/1     Running   0          9m26s
+kubia-manual              1/1     Running   0          6d7h
+nginx-katta               1/1     Running   0          7d4h
+redis-868d64d78-bmvr7     1/1     Running   0          9m26s
+result-5d57b59f4b-lqcsp   1/1     Running   0          9m26s
+vote-94849dc97-cb2tn      1/1     Running   0          2m19s
+worker-dd46d7584-hsqtk    1/1     Running   0          23s
+[root@ip-172-31-0-7 k8s-specifications]# kubectl logs worker-dd46d7584-879v
+Error from server (NotFound): pods "worker-dd46d7584-879v" not found
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get logs worker-dd46d7584-hsqtk
+error: the server doesn't have a resource type "logs"
+[root@ip-172-31-0-7 k8s-specifications]#
+
+[root@ip-172-31-0-7 k8s-specifications]# kubectl logs worker-dd46d7584-hsqtk
+Connected to db
+Found redis at 10.103.247.134
+Connecting to redis
+NOTE: After deleting the worker pod, it didn’t impact the vote, and in the Result app, a new pod has also been created. It's showing connected to the database by using the logs command as shown above. And with the old pod name, no logs have been printed.
+[root@ip-172-31-0-7 k8s-specifications]# kubectl delete po db-b54cd94f4-xmdbb
+pod "db-b54cd94f4-xmdbb" deleted
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]# kubectl get pods
+NAME                      READY   STATUS    RESTARTS   AGE
+db-b54cd94f4-6tbtd        1/1     Running   0          4m24s
+kubia-manual              1/1     Running   0          6d7h
+nginx-katta               1/1     Running   0          7d4h
+redis-868d64d78-bmvr7     1/1     Running   0          14m
+result-5d57b59f4b-lqcsp   1/1     Running   1          14m
+vote-94849dc97-cb2tn      1/1     Running   0          6m55s
+worker-dd46d7584-hsqtk    1/1     Running   1          4m59s
+[root@ip-172-31-0-7 k8s-specifications]#
+[root@ip-172-31-0-7 k8s-specifications]#
+
+NOTE: After deleting the DB pod, I observed both the result and worker apps get restarted, and the result app stopped working.
+
+ 
+
+
+NOTE: Previous data is not present in the result app GUI, due to which the result app stopped working. I have voted again, and the data came from the vote app. After that, the result app starts showing the result as per the new input (dog). As shown below:
+GUI Access for the voting application     Cats vs Dogs!
+     
+GUI Access for the result application      Cats vs Dogs -- Result
+ 
