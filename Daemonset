@@ -1,0 +1,43 @@
+Daemonset:
+
+[root@ip-172-31-0-7 ~]# ls
+example-voting-app  kubernetes-training
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# cat my-app               // creating a manifest
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: my-app
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: my-image
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# ls
+example-voting-app  kubernetes-training  my-app
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# kubectl apply -f my-app                 // applying (or) deploying the pod
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# kubectl get daemonsets my-app           // to check the status of daemonset
+NAME     DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+my-app   1         1         0       1            0           <none>          2m57s
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# kubectl get pods -l app=my-app          // to check the pod status
+NAME           READY   STATUS             RESTARTS   AGE
+my-app-2wnds   0/1     ImagePullBackOff   0          3m1s
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]#
+[root@ip-172-31-0-7 ~]# kubectl get nodes                       // to check the node status
+NAME                                               STATUS   ROLES    AGE    VERSION
+ip-172-31-0-7.ap-southeast-1.compute.internal      Ready    <none>   7d8h   v1.18.5
+ip-172-31-11-132.ap-southeast-1.compute.internal   Ready    master   7d9h   v1.18.5
+[root@ip-172-31-0-7 ~]#
