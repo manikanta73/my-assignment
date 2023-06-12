@@ -1,0 +1,20 @@
+Deployment:
+
+1. pre-checks:-
+kubectl get nodes          // to check all nodes are up and running
+kubectl get pods           // to chech the existing pods
+kubectl get deployments   // to chech the existing deployments
+
+2. In deployment manifest update the new image name.
+After changes execute the below command:-
+kubectl apply -f deployment.yaml         // to apply the changes (or) to apply the file
+kubectl edit -f deployment.yaml          // it will update config temporarily but once we redeploy the pod this config will be erase
+
+3. Kubernetes will create new pods with the new image, and then gradually replace the old pods with the new one and its run with new image.
+
+4.Additional commands to replicate the application:
+
+kubectl scale deployment deployment-name --replicas=2
+kubectl get deployments
+kubectl scale deployment deployment-name --replicas=1
+kubectl get deployments
