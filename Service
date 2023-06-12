@@ -1,0 +1,8 @@
+Service:
+
+kubectl get nodes         // to check the nodes/machines are up and running or not
+kubectl get pods          // to check the pods status to know the application is running or have any issue
+kubectl get replicaset    // to check the status of replicasets all are running or have any issue
+kubectl get svc -o wide   // to check the services are up and running with specific ports and ips 
+kubectl get logs          // for any service/app pod have issue/error will check the logs and troubleshoot accordingly
+kubectl delete po pod-name  // to restart the application pod/container (like refresh pod with new config)
